@@ -84,14 +84,24 @@ router.post(
   '/register', 
   [
     check('name')
+      .trim()
+      .escape()
       .isLength({ min: 3, max: 15 }).withMessage('Name must between 3 and 15 characters.'),
     check('phone')
+      .trim()
+      .escape()
       .isLength({ min: 12, max: 12 }).withMessage('Phone Number must be 12 characters long.'),
     check('username')
+      .trim()
+      .escape()
       .isLength({ min: 5, max: 10 }).withMessage('Username must between 5 and 10 characters.'),
     check('password')
+      .trim()
+      .escape()
       .isLength({ min: 8, max: 12 }).withMessage('Password must between 8 and 12 characters.'),
     check('passwordConfirmation')
+      .trim()
+      .escape()
       .custom((value, {req}) => {
         if (value !== req.body.password) {
           throw new Error('Password confirmation is incorrect.');

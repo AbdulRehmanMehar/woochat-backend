@@ -71,6 +71,39 @@ io.on('connection', (socket) => {
   });
 
 
+  socket.on('conversation', (data) => {
+    if (data.reciever) {
+      connection.query(
+        'SELECT * FROM messages WHERE sender_id=? AND receiver_id=?',
+        [
+          socket.request.user.id,
+          data.reciever
+        ],
+        (err, results) => {
+          if (err) {
+            socket.emit('notification', {
+              success: false,
+              message: 'Internal Server Error'
+            });
+          } else {
+            socket.emit('conversation', {
+              success: true,
+              message: 'Got Results',
+              data: {
+                conversation: results
+              }
+            });
+          }
+        }
+      )
+    } else {
+      socket.emit('notification', {
+        success: false,
+        message: 'Invalid Arguments'
+      });
+    }
+  });
+
   socket.on('message', (data) => {
     if (data.message && data.reciever && socket.request.user.id != data.reciever) {
       let reciever = onlineUsers.filter(
@@ -107,6 +140,11 @@ io.on('connection', (socket) => {
 
         }
       )
+    } else {
+      socket.emit('notification', {
+        success: false,
+        message: 'Invalid Arguments'
+      });
     }
   });
 

@@ -1,3 +1,4 @@
+const cors = require('cors');
 const http = require('http');
 const express = require('express');
 const socket = require('socket.io');
@@ -15,7 +16,7 @@ const app = express();
 const server = http.createServer(app);
 const io = socket(server);
 
-
+app.use(cors());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 

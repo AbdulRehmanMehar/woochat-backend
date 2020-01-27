@@ -34,6 +34,12 @@ router.post(
       .trim()
       .escape()
       .isLength({ min: 12, max: 12 }).withMessage('Length of Phone Number must be 12.')
+      .custom((value, { req }) => {
+        if (value == req.user.phone) {
+          throw new Error('You cannot add yourself in contacts.');
+        }
+        return true;
+      })
   ],
   (req, res) => {
     const errors = validationResult(req);
@@ -70,10 +76,29 @@ router.post(
           }
         }
 
-        return res.status(201).json({
-          success: true,
-          message: 'Contact Added'
-        });
+        connection.query(
+          'SELECT users.id, users.name, users.username, users.phone FROM contacts INNER JOIN users ON contacts.user_phone=users.phone WHERE contacts.id="' +
+            result.insertId +
+            '"',
+            (error, response) => {
+              if (error) {
+                return res.status(500).json({
+                  success: false,
+                  message: 'Internal Server Error'
+                });
+              }
+              const user = JSON.parse(JSON.stringify(response[0]));
+              return res.status(201).json({
+                success: true,
+                message: 'Contact Added',
+                data: {
+                  user: user
+                }
+              });
+            }
+        );
+
+        
 
       }
     );

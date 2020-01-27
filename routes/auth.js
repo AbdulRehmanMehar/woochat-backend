@@ -41,17 +41,17 @@ router.post(
             delete result[0].password;
             const user = JSON.parse(JSON.stringify(result[0])); // convert rowdatapacket to object
             const token = jwt.sign(user, SECRET);
+            user.token = token;
             return res.status(200).json({
               success: true,
               message: 'You are logged In',
               data: {
-                user,
-                token,
+                user
               }
             });
           } else {
             return res.status(400).json({
-            success: false,
+              success: false,
               message: 'Invalid Password',
               errors: [
                 {

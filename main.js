@@ -21,7 +21,7 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 
 app.use('/auth', authRoutes);
-app.use('/', protectedRoutes);
+app.use('/protected', protectedRoutes);
 
 app.get('/', (req, res) => {
   return res.status(200).json({

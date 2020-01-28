@@ -128,8 +128,8 @@ io.on('connection', (socket) => {
             });
           } else {
             const message = {
-              sender: socket.request.user.id,
-              reciever: data.reciever,
+              sender_id: socket.request.user.id,
+              receiver_id: data.reciever,
               message: data.message
             };
 

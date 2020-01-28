@@ -92,7 +92,7 @@ router.post(
                 success: true,
                 message: 'Contact Added',
                 data: {
-                  user: user
+                  contact: user
                 }
               });
             }

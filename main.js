@@ -75,10 +75,12 @@ io.on('connection', (socket) => {
   socket.on('conversation', (data) => {
     if (data.reciever) {
       connection.query(
-        'SELECT * FROM messages WHERE sender_id=? AND receiver_id=?',
+        'SELECT * FROM messages WHERE (sender_id=? AND receiver_id=?) OR (sender_id=? AND receiver_id=?)',
         [
           socket.request.user.id,
-          data.reciever
+          data.reciever,
+          data.reciever,
+          socket.request.user.id,
         ],
         (err, results) => {
           if (err) {

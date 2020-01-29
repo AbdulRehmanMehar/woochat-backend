@@ -110,7 +110,7 @@ io.on('connection', (socket) => {
   socket.on('message', (data) => {
     if (data.message && data.reciever && socket.request.user.id != data.reciever) {
       let reciever = onlineUsers.filter(
-        u => u.user._id == data.reciever
+        u => u.user.id == data.reciever
       )[0];
 
       connection.query(
